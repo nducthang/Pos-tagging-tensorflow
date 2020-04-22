@@ -1,8 +1,8 @@
-from flask import Flask, render_template, request, url_for, jsonify
+from flask import Flask, render_template, request, jsonify
 import config.config as config
 from utils import load_config
 import tensorflow as tf
-from train.model_tensorflow.model_tensorflow import Model
+from train.model_tensorflow import Model
 from flask_cors import CORS  # pip install -U flask-cors
 import os
 
@@ -45,7 +45,7 @@ model_api = get_model_api()
 
 @app.route('/')
 def index():
-    return "Index API"
+    return render_template("index.html")
 
 
 # HTTP Errors handlers

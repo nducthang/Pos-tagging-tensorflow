@@ -2,7 +2,7 @@
 <html lang="">
 
 <head>
-    <title>Trích xuất các thực thể trong câu</title>
+    <title>Gán nhãn từ loại tiếng Việt</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
@@ -256,119 +256,27 @@
             margin-right: -15px;
         }
 
-        .module-test-api .result-col .pretty-view-results .table-scroll {
-            overflow-y: auto;
-            height: 118%;
-            width: 101%;
-            padding-right: 5px;
-        }
-
-        .module-test-api .result-col .pretty-view-results .row-header .col-header {
-            opacity: .9;
-            font-size: 12px;
-            color: #919191;
-            text-transform: uppercase;
-            font-weight: 700;
-            padding-bottom: 8px;
-        }
-
-        .module-test-api .result-col .pretty-view-results .table-scroll {
-            overflow-y: auto;
-            height: 118%;
-            width: 101%;
-            padding-right: 5px;
-        }
-
-        .module-test-api .result-col .pretty-view-results .path {
-            margin-left: -15px;
-            margin-right: -15px;
-            max-height: 240px;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        .module-test-api .result-col .pretty-view-results .path tr {
-            font-size: 14px;
-            color: #333;
-            border-bottom: 1px solid rgba(0, 0, 0, .05);
-            margin-left: 0;
-            margin-right: 0;
-        }
-
-        table {
-            border-collapse: collapse;
-            border-spacing: 0;
-        }
-
-        tr {
-            display: table-row;
-            vertical-align: inherit;
-            border-color: inherit;
-        }
-
-        tbody {
-            display: table-row-group;
-            vertical-align: middle;
-            border-color: inherit;
-        }
-
-        .module-test-api .result-col .pretty-view-results .path tr .col-classifier-probability,
-        .module-test-api .result-col .pretty-view-results .path tr .col-classifier-tag,
-        .module-test-api .result-col .pretty-view-results .path tr .col-extractor-tag {
-            min-height: 41px;
-            line-height: 41px;
-        }
-
-        .module-test-api .result-col .pretty-view-results table td:first-child {
-            border-left: none;
-        }
-
-        table td[class*=col-],
-        table th[class*=col-] {
-            position: static;
-            float: none;
-            display: table-cell;
-        }
-
-        td {
-            display: table-cell;
-            vertical-align: inherit;
-        }
-
-        .module-test-api .result-col .pretty-view-results .path tr .col-classifier-probability,
-        .module-test-api .result-col .pretty-view-results .path tr .col-extractor-tag {
-            color: #11c852;
-        }
-
-        .module-test-api .result-col .pretty-view-results table td {
-            border-right: 10px solid transparent;
-        }
-
-        *,
-        :after,
-        :before {
-            box-sizing: border-box;
-        }
-
-        .module-test-api .result-col .pretty-view-results .path tr .col-extractor-value {
-            padding: 10px 2px 10px 0;
-            width: 70%;
-        }
-
-        .module-test-api .result-col .pretty-view-results table td:last-child {
-            border-right: none;
-        }
-
-        .module-test-api .result-col .pretty-view-results table {
-            width: 100%;
-        }
-
         .spinner {
             width: 40px;
             height: 40px;
 
             position: relative;
             margin: auto;
+        }
+
+        .code-view-results {
+            height: 400px;
+            overflow: auto;
+        }
+
+        .module-test-api .result-col .code-view-results .result-body {
+            padding-left: 35px;
+        }
+
+        .module-test-api .result-col .code-view-results .result-header {
+            color: #989ea4;
+            font-family: Consolas, Monaco, Andale Mono, Ubuntu Mono, monospace;
+            padding: 29px 10px 10px 35px;
         }
     </style>
 </head>
@@ -380,13 +288,15 @@
                 <h1>POS TAGGING</h1>
             </a>
             <p>Đánh nhãn từ loại trong câu.</p>
+            <p><b>AP:</b> Adjective phrase - <b>NP:</b> Noun phrase - <b>PP:</b> Prepositional phrase - <b>VP:</b> Verb
+                phrase</p>
         </div>
         <div class="module-test-api extractor">
             <div class="query-col">
                 <h2>Test with your own text</h2>
                 <div class="form-group margin-top-15">
                     <textarea class="form-control extractor" id="text-input-field"
-                        name="text">anh Thắng đẹp trai quê ở thành phố Hồ Chí Minh</textarea>
+                        name="text">Mấy tháng gần đây, tuần nào báo chí Maylaysia cũng có bài viết về các vụ cướp biển ở Malacca, các anh nên cẩn thận đấy!</textarea>
                 </div>
                 <button class="card-text btn btn-outline-primary" id="btn">Extract Text</button>
                 <div class="spinner" id="spinner" style="display: none"></div>
@@ -395,140 +305,222 @@
                 <div class="inline-multi-switch selected-inline">
                     <span>
                         <a class="active" id="tag_inline" onclick="ClickInline()">Inline</a>
-                        <a id="tag_list" onclick="ClickList()">List</a>
+                        <a id="tag_list" onclick="ClickList()">Json</a>
                     </span>
                 </div>
 
                 <!--Hiển thị tab INLINE-->
                 <div class="pretty-view-results extractor-creation-wizard" id="inline">
-                    <div class="table-scroll esample-text run-demo-text" id="view_inline"></div>
+                    <div class="table-scroll esample-text run-demo-text" id="view_inline">
+                        <!--Demo-->
+                        <span data-entity="NP" class="annotated true-annotated run-demo color-2">Mấy</span> <span
+                            data-entity="NP" class="annotated true-annotated run-demo color-2">tháng</span> <span
+                            data-entity="AP" class="annotated true-annotated run-demo color-1">gần</span> <span
+                            data-entity="NP" class="annotated true-annotated run-demo color-2">đây</span> <span
+                            data-entity="" class="run-demo">,</span> <span data-entity="NP"
+                            class="annotated true-annotated run-demo color-2">tuần</span> <span data-entity="NP"
+                            class="annotated true-annotated run-demo color-2">nào</span> <span data-entity="NP"
+                            class="annotated true-annotated run-demo color-2">báo_chí</span> <span data-entity="NP"
+                            class="annotated true-annotated run-demo color-2">Maylaysia</span> <span data-entity=""
+                            class="run-demo">cũng</span> <span data-entity="VP"
+                            class="annotated true-annotated run-demo color-4">có</span> <span data-entity="NP"
+                            class="annotated true-annotated run-demo color-2">bài</span> <span data-entity="VP"
+                            class="annotated true-annotated run-demo color-4">viết</span> <span data-entity="PP"
+                            class="annotated true-annotated run-demo color-3">về</span> <span data-entity="NP"
+                            class="annotated true-annotated run-demo color-2">các</span> <span data-entity="NP"
+                            class="annotated true-annotated run-demo color-2">vụ</span> <span data-entity="NP"
+                            class="annotated true-annotated run-demo color-2">cướp_biển</span> <span data-entity="PP"
+                            class="annotated true-annotated run-demo color-3">ở</span> <span data-entity="NP"
+                            class="annotated true-annotated run-demo color-2">Malacca</span> <span data-entity=""
+                            class="run-demo">,</span> <span data-entity="NP"
+                            class="annotated true-annotated run-demo color-2">các</span> <span data-entity="NP"
+                            class="annotated true-annotated run-demo color-2">anh</span> <span data-entity=""
+                            class="run-demo">nên</span> <span data-entity="AP"
+                            class="annotated true-annotated run-demo color-1">cẩn_thận</span> <span data-entity=""
+                            class="run-demo">đấy !</span>
+                        <!--End demo-->
+                    </div>
                 </div>
 
                 <!-- Hiển thị tab LIST -->
-                <div class="pretty-view-results table-view-results collapse" id="list">
-                    <div class="row row-header">
-                        <div class="col-md-6 col-header">Tag</div>
-                        <div class="col-md-6 col-header extractor-value">Value</div>
+                <div class="code-view-results" style="background-color: black;" id="list">
+                    <div class="result-header"></div>
+                    <div class="result-body">
+                        <pre style="color: cyan;"><code id="json">
+{
+        "tags": [
+                "B-NP",
+                "B-NP",
+                "B-AP",
+                "B-NP",
+                "O",
+                "B-NP",
+                "B-NP",
+                "B-NP",
+                "B-NP",
+                "O",
+                "B-VP",
+                "B-NP",
+                "B-VP",
+                "B-PP",
+                "B-NP",
+                "B-NP",
+                "B-NP",
+                "B-PP",
+                "B-NP",
+                "O",
+                "B-NP",
+                "B-NP",
+                "O",
+                "B-AP",
+                "O",
+                "O"
+        ],
+        "tokens": [
+                "Mấy",
+                "tháng",
+                "gần",
+                "đây",
+                ",",
+                "tuần",
+                "nào",
+                "báo_chí",
+                "Maylaysia",
+                "cũng",
+                "có",
+                "bài",
+                "viết",
+                "về",
+                "các",
+                "vụ",
+                "cướp_biển",
+                "ở",
+                "Malacca",
+                ",",
+                "các",
+                "anh",
+                "nên",
+                "cẩn_thận",
+                "đấy",
+                "!"
+        ]
+}
+                        </code></pre>
+                        </pre>
                     </div>
-                    <div class="table-scroll">
-                        <table>
-                            <tbody class="path">
-                                <tr>
-                                    <td class="col-extractor-tag">BRAND</td>
-                                    <td class="col-extractor-value">{{item['nhan_hieu']}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
 
+                </div>
             </div>
         </div>
-    </div>
-    <script>
-        var _inline = document.getElementById('inline');
-        var _list = document.getElementById('list');
-        var _tab_inline = document.getElementById('tag_inline');
-        var _tab_list = document.getElementById('tag_list');
-        function ClickInline() {
-            _tab_list.classList.remove("active");
-            _tab_inline.classList.add("active");
-            _list.classList.add("collapse");
-            _inline.classList.remove("collapse");
+        <script>
+            var _inline = document.getElementById('inline');
+            var _list = document.getElementById('list');
+            var _tab_inline = document.getElementById('tag_inline');
+            var _tab_list = document.getElementById('tag_list');
+            function ClickInline() {
+                _tab_list.classList.remove("active");
+                _tab_inline.classList.add("active");
+                _list.classList.add("collapse");
+                _inline.classList.remove("collapse");
 
-        }
-        function ClickList() {
-            _tab_inline.classList.remove("active");
-            _tab_list.classList.add("active");
-            _inline.classList.add("collapse");
-            _list.classList.remove("collapse");
-        }
-    </script>
-    <script type="text/javascript">
-        function api_call(input) {
-            // hide button and make the spinner appear
-            $('#btn').toggle();
-            $('#spinner').toggle();
-            $.ajax({
-                url: "http://127.0.0.1:5000/api",
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ "text": String(input) }),
+            }
+            function ClickList() {
+                _tab_inline.classList.remove("active");
+                _tab_list.classList.add("active");
+                _inline.classList.add("collapse");
+                _list.classList.remove("collapse");
+            }
+        </script>
+        <script type="text/javascript">
+            function api_call(input) {
+                // hide button and make the spinner appear
+                $('#btn').toggle();
+                $('#spinner').toggle();
+                $.ajax({
+                    url: "http://127.0.0.1:5000/api",
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ "text": String(input) }),
 
-                success: function (data, textStatus, jQxhr) {
-                    // toggle the spinner and button
-                    $('#btn').toggle();
-                    $('#spinner').toggle();
+                    success: function (data, textStatus, jQxhr) {
+                        // toggle the spinner and button
+                        $('#btn').toggle();
+                        $('#spinner').toggle();
 
-                    // fill the html for answer
-                    var htmlInline = "";
-                    var i = 0;
-                    data.tokens = data.tokens[0];
-                    data.tags = data.tags[0];
-                    var len = data.tokens.length;
-                    while (i < len) {
-                        if (data.tags[i] == "B-AP") {
-                            // thẻ đầu của cụm tính từ Adjective phrase
-                            htmlInline += " <span data-entity=\"AP\" class=\"annotated true-annotated run-demo color-1\">" + data.tokens[i++];
-                            while (data.tags[i] == "I-AP") {
-                                htmlInline += " " + data.tokens[i++];
+                        // fill the html for answer
+                        var htmlInline = "";
+                        var i = 0;
+                        data.tokens = data.tokens[0];
+                        data.tags = data.tags[0];
+                        var len = data.tokens.length;
+                        while (i < len) {
+                            if (data.tags[i] == "B-AP") {
+                                // thẻ đầu của cụm tính từ Adjective phrase
+                                htmlInline += " <span data-entity=\"AP\" class=\"annotated true-annotated run-demo color-1\">" + data.tokens[i++];
+                                while (data.tags[i] == "I-AP") {
+                                    htmlInline += " " + data.tokens[i++];
+                                }
+                                htmlInline += "</span>";
                             }
-                            htmlInline += "</span>";
-                        }
-                        if (data.tags[i] == "B-NP") {
-                            // thẻ đầu của cụm danh từ Noun pharse
-                            htmlInline += "  <span data-entity=\"NP\" class=\"annotated true-annotated run-demo color-2\">" + data.tokens[i++];
-                            while (data.tags[i] == "I-NP") {
-                                htmlInline += " " + data.tokens[i++];
+                            if (data.tags[i] == "B-NP") {
+                                // thẻ đầu của cụm danh từ Noun pharse
+                                htmlInline += "  <span data-entity=\"NP\" class=\"annotated true-annotated run-demo color-2\">" + data.tokens[i++];
+                                while (data.tags[i] == "I-NP") {
+                                    htmlInline += " " + data.tokens[i++];
+                                }
+                                htmlInline += "</span>";
                             }
-                            htmlInline += "</span>";
-                        }
-                        if (data.tags[i] == "B-PP") {
-                            // giới từ - chỉ là 1 từ
-                            htmlInline += " <span data-entity=\"PP\" class=\"annotated true-annotated run-demo color-3\">" + data.tokens[i++] + "</span>";
-                        }
-                        if (data.tags[i] == "B-VP") {
-                            // Cụm động từ verb pharse
-                            htmlInline += "  <span data-entity=\"VP\" class=\"annotated true-annotated run-demo color-4\">" + data.tokens[i++];
-                            while (data.tags[i] == "I-VP") {
-                                htmlInline += " " + data.tokens[i++];
+                            if (data.tags[i] == "B-PP") {
+                                // giới từ - chỉ là 1 từ
+                                htmlInline += " <span data-entity=\"PP\" class=\"annotated true-annotated run-demo color-3\">" + data.tokens[i++] + "</span>";
                             }
-                            htmlInline += "</span>";
-                        }
-                        if (data.tags[i] == "O" || data.tags[i] == "PAD") {
-                            // Các thẻ không xác định
-                            htmlInline += " <span data-entity=\"\" class=\"run-demo\">" + data.tokens[i++]
-                            while (data.tags[i] == "O" || data.tags[i] == "PAD") {
-                                htmlInline += " " + data.tokens[i++];
+                            if (data.tags[i] == "B-VP") {
+                                // Cụm động từ verb pharse
+                                htmlInline += "  <span data-entity=\"VP\" class=\"annotated true-annotated run-demo color-4\">" + data.tokens[i++];
+                                while (data.tags[i] == "I-VP") {
+                                    htmlInline += " " + data.tokens[i++];
+                                }
+                                htmlInline += "</span>";
                             }
-                            htmlInline += "</span>";
+                            if (data.tags[i] == "O" || data.tags[i] == "PAD") {
+                                // Các thẻ không xác định
+                                htmlInline += " <span data-entity=\"\" class=\"run-demo\">" + data.tokens[i++]
+                                while (data.tags[i] == "O" || data.tags[i] == "PAD") {
+                                    htmlInline += " " + data.tokens[i++];
+                                }
+                                htmlInline += "</span>";
+                            }
                         }
-                    }
 
-                    $("#view_inline").html(htmlInline);
-                    $("#input").val("");
-                },
-                error: function (jqXhr, textStatus, errorThrown) {
-                    $('#btn').toggle();
-                    $('#spinner').toggle();
-                    
-                    $("#view_inline").html("<span data-entity=\"\" class=\"run-demo\">Sorry, the server is asleep...<br/>Try again in a moment!");
-                    console.log(errorThrown);
-                },
-                timeout: 3000 // sets timeout to 10 seconds
+                        $("#view_inline").html(htmlInline);
+                        $("#input").val("");
+
+                        // Preview tag json
+                        jsonStr = JSON.stringify(data, null, '\t');
+                        $("#json").html(jsonStr);
+                    },
+                    error: function (jqXhr, textStatus, errorThrown) {
+                        $('#btn').toggle();
+                        $('#spinner').toggle();
+
+                        $("#view_inline").html("<span data-entity=\"\" class=\"run-demo\">Sorry, the server is asleep...<br/>Try again in a moment!");
+                        $("#json").html("Sorry, the server is asleep...<br/>Try again in a moment!");
+                        console.log(errorThrown);
+                    },
+                    timeout: 3000 // sets timeout to 10 seconds
+                });
+            }
+
+            $(document).ready(function () {
+                // request when clicking on the button
+                $('#btn').click(function () {
+                    // get the input data
+                    var input = $("#text-input-field").val();
+                    api_call(input);
+                    input = "";
+                });
             });
-        }
-
-        $(document).ready(function () {
-            // request when clicking on the button
-            $('#btn').click(function () {
-                // get the input data
-                var input = $("#text-input-field").val();
-                api_call(input);
-                input = "";
-            });
-        });
-    </script>
+        </script>
 </body>
 
 </html>
