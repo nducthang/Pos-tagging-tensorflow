@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <title>Trích xuất các thực thể trong câu</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            font-family: Rubik, Helvetica, Arial, sans-serif;
+            background-color: #f5f7fa;
+        }
+
+        h1 {
+            width: 60%;
+        }
+
+        .module-test-api .query-col .text-form textarea {
+            font-size: 15px;
+            padding: 13px 16px;
+            color: #222;
+            box-shadow: inset 0 1px 0 0 rgba(0, 0, 0, .05);
+            border: 1px solid #008bff8c;
+            resize: none;
+            height: 246px;
+        }
+
+        textarea {
+            overflow: auto;
+            vertical-align: top;
+        }
+
+        a:hover {
+            color: white;
+            text-decoration: none;
+        }
+
+
+        ::selection {
+            background: #b9d8f7;
+        }
+
+        .navbar-brand {
+            background: #007bff;
+            color: #FFF;
+            width: 60%;
+        }
+
+        .module-test-api .query-col .text-form .btn-primary {
+            margin-top: 10px;
+            border-radius: 6px;
+            background-color: #008bff;
+            box-shadow: 0 3px 10px 0 rgba(0, 139, 255, .3);
+            font-size: 16px;
+            color: #fff;
+            font-weight: 400;
+        }
+
+        .module-test-api .inline-multi-switch {
+            position: absolute;
+            top: 20px;
+            right: 22px;
+        }
+
+        .inline-multi-switch {
+            font-size: 13px;
+        }
+
+        .inline-multi-switch a.active {
+            color: #08f;
+            cursor: unset;
+            border-bottom: 3px solid;
+        }
+
+        .inline-multi-switch a {
+            text-transform: uppercase;
+            color: #989ea4;
+            margin-left: 10px;
+        }
+
+        .module-test-api .result-col.result-col-type-table {
+            background-color: #fff;
+            border-left: 1px solid #ececec;
+        }
+
+        .module-test-api .result-col {
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+            height: 400px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .module-test-api .query-col,
+        .module-test-api .result-col {
+            width: 50%;
+            float: left;
+        }
+
+        .module-test-api .result-col .pretty-view-results {
+            padding: 68px 25px;
+            height: 100%;
+        }
+
+        .module-test-api .result-col .pretty-view-results .table-scroll {
+            overflow-y: auto;
+            height: 118%;
+            width: 101%;
+            padding-right: 5px;
+        }
+
+        .extractor-creation-wizard .esample-text .run-demo {
+            margin-right: 3px;
+        }
+
+
+        .extractor-creation-wizard .esample-text .annotated.run-demo {
+            cursor: auto;
+            white-space: normal;
+        }
+
+        .extractor-creation-wizard .esample-text .run-demo {
+            margin-right: 3px;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-1.true-annotated {
+            color: #1d92ff;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-1 {
+            background: #e9f4ff;
+            border-color: #9cd0ff;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-1:after {
+            background: #1d92ff;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-2.true-annotated {
+            color: #43ce85;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-2 {
+            background: #e5f8ee;
+            border-color: #a9e8c7;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-2:after {
+            background: #43ce85;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-3.true-annotated {
+            color: #eb8042;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-3 {
+            background: #f1e8e3;
+            border-color: #ecc5ae;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-3:after {
+            background: #eb8042;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-4.true-annotated {
+            color: #e73e3e;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-4 {
+            background: #ebc2c2;
+            border-color: #db9c9c;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-4:after {
+            background: #e73e3e;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-5.true-annotated {
+            color: #abb42d;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-5 {
+            background: #eff59b;
+            border-color: #ebf55c;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-5:after {
+            background: #abb42d;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-6.true-annotated {
+            color: #2d2fc9;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-6 {
+            background: #c4c4f0;
+            border-color: #9091ce;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated.color-6:after {
+            background: #2d2fc9;
+        }
+
+
+
+        .extractor-creation-wizard .esample-text .annotated.true-annotated:after {
+            box-sizing: border-box;
+            content: attr(data-entity);
+            line-height: 1;
+            padding: .35em;
+            border-radius: .35em;
+            text-transform: uppercase;
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0 0 .1rem .5rem;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .extractor-creation-wizard .esample-text .annotated {
+            padding: .25em .35em;
+            line-height: 1;
+            display: inline-block;
+            border-radius: .25em;
+            border: 1px solid;
+        }
+
+        .module-test-api .query-col {
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+            padding: 26px;
+            height: 400px;
+            background-color: #fff;
+        }
+
+        .module-test-api .result-col .pretty-view-results.table-view-results {
+            font-family: Roboto Mono;
+        }
+
+        .module-test-api .result-col .pretty-view-results .row-header .col-header.extractor-value {
+            padding-left: 6px;
+        }
+
+        .module-test-api .result-col .pretty-view-results .row-header {
+            border-bottom: 1px solid rgba(0, 0, 0, .05);
+        }
+
+        .row {
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+
+        .module-test-api .result-col .pretty-view-results .table-scroll {
+            overflow-y: auto;
+            height: 118%;
+            width: 101%;
+            padding-right: 5px;
+        }
+
+        .module-test-api .result-col .pretty-view-results .row-header .col-header {
+            opacity: .9;
+            font-size: 12px;
+            color: #919191;
+            text-transform: uppercase;
+            font-weight: 700;
+            padding-bottom: 8px;
+        }
+
+        .module-test-api .result-col .pretty-view-results .table-scroll {
+            overflow-y: auto;
+            height: 118%;
+            width: 101%;
+            padding-right: 5px;
+        }
+
+        .module-test-api .result-col .pretty-view-results .path {
+            margin-left: -15px;
+            margin-right: -15px;
+            max-height: 240px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .module-test-api .result-col .pretty-view-results .path tr {
+            font-size: 14px;
+            color: #333;
+            border-bottom: 1px solid rgba(0, 0, 0, .05);
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        tr {
+            display: table-row;
+            vertical-align: inherit;
+            border-color: inherit;
+        }
+
+        tbody {
+            display: table-row-group;
+            vertical-align: middle;
+            border-color: inherit;
+        }
+
+        .module-test-api .result-col .pretty-view-results .path tr .col-classifier-probability,
+        .module-test-api .result-col .pretty-view-results .path tr .col-classifier-tag,
+        .module-test-api .result-col .pretty-view-results .path tr .col-extractor-tag {
+            min-height: 41px;
+            line-height: 41px;
+        }
+
+        .module-test-api .result-col .pretty-view-results table td:first-child {
+            border-left: none;
+        }
+
+        table td[class*=col-],
+        table th[class*=col-] {
+            position: static;
+            float: none;
+            display: table-cell;
+        }
+
+        td {
+            display: table-cell;
+            vertical-align: inherit;
+        }
+
+        .module-test-api .result-col .pretty-view-results .path tr .col-classifier-probability,
+        .module-test-api .result-col .pretty-view-results .path tr .col-extractor-tag {
+            color: #11c852;
+        }
+
+        .module-test-api .result-col .pretty-view-results table td {
+            border-right: 10px solid transparent;
+        }
+
+        *,
+        :after,
+        :before {
+            box-sizing: border-box;
+        }
+
+        .module-test-api .result-col .pretty-view-results .path tr .col-extractor-value {
+            padding: 10px 2px 10px 0;
+            width: 70%;
+        }
+
+        .module-test-api .result-col .pretty-view-results table td:last-child {
+            border-right: none;
+        }
+
+        .module-test-api .result-col .pretty-view-results table {
+            width: 100%;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+
+            position: relative;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="container p-3 my-3 bg-primary text-white">
+            <a href="/" class="navbar-brand">
+                <h1>Named Entity Recognition</h1>
+            </a>
+            <p>Trích xuất các thực thể trong câu.</p>
+        </div>
+        <div class="module-test-api extractor">
+            <div class="query-col">
+                <h2>Test with your own text</h2>
+                <div class="form-group margin-top-15">
+                    <textarea class="form-control extractor" id="text-input-field"
+                        name="text">Nhập câu của bạn vào đây</textarea>
+                </div>
+                <button class="card-text btn btn-outline-primary" id="btn">Extract Text</button>
+                <div class="spinner" id="spinner" style="display: none"></div>
+            </div>
+            <div class="result-col result-col-type-table">
+                <div class="inline-multi-switch selected-inline">
+                    <span>
+                        <a class="active" id="tag_inline" onclick="ClickInline()">Inline</a>
+                        <a id="tag_list" onclick="ClickList()">List</a>
+                    </span>
+                </div>
+
+                <!--Hiển thị tab INLINE-->
+                <div class="pretty-view-results extractor-creation-wizard" id="inline">
+                    <div class="table-scroll esample-text run-demo-text">
+                        <span data-entity="" class="run-demo">
+                            Đây là
+                        </span>
+
+                        <span data-entity="BRAND" class="annotated true-annotated run-demo color-1">
+                            NOKIA
+                        </span>
+
+                        <span data-entity="MODEL" class="annotated true-annotated run-demo color-2">
+                            AHBFD1133
+                        </span>
+
+                        <span data-entity="STATUS" class="annotated true-annotated run-demo color-3">
+                            mới 100%
+                        </span>
+
+                        <span data-entity="COLOR" class="annotated true-annotated run-demo color-4">
+                            màu vàng
+                        </span>
+
+                        <span data-entity="TYPE" class="annotated true-annotated run-demo color-5">
+                            điện thoại di động
+                        </span>
+
+                        <span data-entity="ORIGIN" class="annotated true-annotated run-demo color-6">
+                            Việt Nam
+                        </span>
+
+                    </div>
+                </div>
+
+                <!-- Hiển thị tab LIST -->
+                <div class="pretty-view-results table-view-results collapse" id="list">
+                    <div class="row row-header">
+                        <div class="col-md-6 col-header">Tag</div>
+                        <div class="col-md-6 col-header extractor-value">Value</div>
+                    </div>
+                    <div class="table-scroll">
+                        <table>
+                            <tbody class="path">
+                                <tr>
+                                    <td class="col-extractor-tag">BRAND</td>
+                                    <td class="col-extractor-value">{{item['nhan_hieu']}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        var _inline = document.getElementById('inline');
+        var _list = document.getElementById('list');
+        var _tab_inline = document.getElementById('tag_inline');
+        var _tab_list = document.getElementById('tag_list');
+        function ClickInline() {
+            _tab_list.classList.remove("active");
+            _tab_inline.classList.add("active");
+            _list.classList.add("collapse");
+            _inline.classList.remove("collapse");
+
+        }
+        function ClickList() {
+            _tab_inline.classList.remove("active");
+            _tab_list.classList.add("active");
+            _inline.classList.add("collapse");
+            _list.classList.remove("collapse");
+        }
+    </script>
+    <script type="text/javascript">
+        function api_call(input) {
+            // hide button and make the spinner appear
+            $('#btn').toggle();
+            $('#spinner').toggle();
+            $.ajax({
+                url: "http://127.0.0.1:5000/api",
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ "text": String(input) }),
+
+                success: function (data, textStatus, jQxhr) {
+                    // toggle the spinner and button
+                    $('#btn').toggle();
+                    $('#spinner').toggle();
+
+                    // fill the html for answer
+                    console.log(data)
+                    //$('#api_input').html(data.input);
+                    //$('#api_output').html(data.output);
+
+                    $("#input").val("");
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    $('#btn').toggle();
+                    $('#spinner').toggle();
+
+                    //$('#api_input').html("Sorry, the server is asleep...");
+                    //$('#api_output').html("Try again in a moment!");
+
+                    console.log(errorThrown);
+                },
+                timeout: 3000 // sets timeout to 10 seconds
+            });
+        }
+
+        $(document).ready(function () {
+            // request when clicking on the button
+            $('#btn').click(function () {
+                // get the input data
+                var input = $("#text-input-field").val();
+                api_call(input);
+                input = "";
+            });
+        });
+    </script>
+</body>
+
+</html>
