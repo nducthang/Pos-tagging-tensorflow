@@ -377,16 +377,16 @@
     <div class="container">
         <div class="container p-3 my-3 bg-primary text-white">
             <a href="/" class="navbar-brand">
-                <h1>Named Entity Recognition</h1>
+                <h1>POS TAGGING</h1>
             </a>
-            <p>Trích xuất các thực thể trong câu.</p>
+            <p>Đánh nhãn từ loại trong câu.</p>
         </div>
         <div class="module-test-api extractor">
             <div class="query-col">
                 <h2>Test with your own text</h2>
                 <div class="form-group margin-top-15">
                     <textarea class="form-control extractor" id="text-input-field"
-                        name="text">Nhập câu của bạn vào đây</textarea>
+                        name="text">anh Thắng đẹp trai quê ở thành phố Hồ Chí Minh</textarea>
                 </div>
                 <button class="card-text btn btn-outline-primary" id="btn">Extract Text</button>
                 <div class="spinner" id="spinner" style="display: none"></div>
@@ -401,36 +401,7 @@
 
                 <!--Hiển thị tab INLINE-->
                 <div class="pretty-view-results extractor-creation-wizard" id="inline">
-                    <div class="table-scroll esample-text run-demo-text">
-                        <span data-entity="" class="run-demo">
-                            Đây là
-                        </span>
-
-                        <span data-entity="BRAND" class="annotated true-annotated run-demo color-1">
-                            NOKIA
-                        </span>
-
-                        <span data-entity="MODEL" class="annotated true-annotated run-demo color-2">
-                            AHBFD1133
-                        </span>
-
-                        <span data-entity="STATUS" class="annotated true-annotated run-demo color-3">
-                            mới 100%
-                        </span>
-
-                        <span data-entity="COLOR" class="annotated true-annotated run-demo color-4">
-                            màu vàng
-                        </span>
-
-                        <span data-entity="TYPE" class="annotated true-annotated run-demo color-5">
-                            điện thoại di động
-                        </span>
-
-                        <span data-entity="ORIGIN" class="annotated true-annotated run-demo color-6">
-                            Việt Nam
-                        </span>
-
-                    </div>
+                    <div class="table-scroll esample-text run-demo-text" id="view_inline"></div>
                 </div>
 
                 <!-- Hiển thị tab LIST -->
@@ -490,19 +461,58 @@
                     $('#spinner').toggle();
 
                     // fill the html for answer
-                    console.log(data)
-                    //$('#api_input').html(data.input);
-                    //$('#api_output').html(data.output);
+                    var htmlInline = "";
+                    var i = 0;
+                    data.tokens = data.tokens[0];
+                    data.tags = data.tags[0];
+                    var len = data.tokens.length;
+                    while (i < len) {
+                        if (data.tags[i] == "B-AP") {
+                            // thẻ đầu của cụm tính từ Adjective phrase
+                            htmlInline += " <span data-entity=\"AP\" class=\"annotated true-annotated run-demo color-1\">" + data.tokens[i++];
+                            while (data.tags[i] == "I-AP") {
+                                htmlInline += " " + data.tokens[i++];
+                            }
+                            htmlInline += "</span>";
+                        }
+                        if (data.tags[i] == "B-NP") {
+                            // thẻ đầu của cụm danh từ Noun pharse
+                            htmlInline += "  <span data-entity=\"NP\" class=\"annotated true-annotated run-demo color-2\">" + data.tokens[i++];
+                            while (data.tags[i] == "I-NP") {
+                                htmlInline += " " + data.tokens[i++];
+                            }
+                            htmlInline += "</span>";
+                        }
+                        if (data.tags[i] == "B-PP") {
+                            // giới từ - chỉ là 1 từ
+                            htmlInline += " <span data-entity=\"PP\" class=\"annotated true-annotated run-demo color-3\">" + data.tokens[i++] + "</span>";
+                        }
+                        if (data.tags[i] == "B-VP") {
+                            // Cụm động từ verb pharse
+                            htmlInline += "  <span data-entity=\"VP\" class=\"annotated true-annotated run-demo color-4\">" + data.tokens[i++];
+                            while (data.tags[i] == "I-VP") {
+                                htmlInline += " " + data.tokens[i++];
+                            }
+                            htmlInline += "</span>";
+                        }
+                        if (data.tags[i] == "O" || data.tags[i] == "PAD") {
+                            // Các thẻ không xác định
+                            htmlInline += " <span data-entity=\"\" class=\"run-demo\">" + data.tokens[i++]
+                            while (data.tags[i] == "O" || data.tags[i] == "PAD") {
+                                htmlInline += " " + data.tokens[i++];
+                            }
+                            htmlInline += "</span>";
+                        }
+                    }
 
+                    $("#view_inline").html(htmlInline);
                     $("#input").val("");
                 },
                 error: function (jqXhr, textStatus, errorThrown) {
                     $('#btn').toggle();
                     $('#spinner').toggle();
-
-                    //$('#api_input').html("Sorry, the server is asleep...");
-                    //$('#api_output').html("Try again in a moment!");
-
+                    
+                    $("#view_inline").html("<span data-entity=\"\" class=\"run-demo\">Sorry, the server is asleep...<br/>Try again in a moment!");
                     console.log(errorThrown);
                 },
                 timeout: 3000 // sets timeout to 10 seconds

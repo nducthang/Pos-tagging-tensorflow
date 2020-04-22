@@ -34,7 +34,7 @@ def get_model_api():
 
     def model_api(input_data):
         sent_token, tags = model.predict_batch(input_data, all_words, word2idx, idx2tag)
-        output_data = {'token': sent_token, 'tags': tags}
+        output_data = {'tokens': sent_token, 'tags': tags}
         return output_data
 
     return model_api
@@ -68,14 +68,12 @@ def server_error(e):
 def predict():
     api_input = request.json
     if api_input is not None:
-        app.logger.info("api_input: " + str(api_input))
         sentence = [str(api_input["text"])]
         response = model_api(sentence)
-        app.logger.info("api_output: " + str(response))
         return jsonify(response)
     else:
         return "Don't send None data to server"
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

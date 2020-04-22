@@ -7,9 +7,6 @@ import config.config as config
 # tf.executing_eagerly()
 
 # parameters
-PATH_TRAIN = config.PATH_TRAIN
-PATH_TEST = config.PATH_TEST
-
 MAX_LENGTH = config.MAX_LENGTH
 EMBEDDING_SIZE = config.EMBEDDING_SIZE
 NUM_UNIT = config.NUM_UNIT
@@ -19,6 +16,7 @@ BATCH_SIZE = config.BATCH_SIZE
 DISPLAY_STEP = config.DISPLAY_STEP
 SAVE_PATH_CHECKPOINT = config.SAVE_PATH_CHECKPOINT
 
+PATH_TRAIN = config.PATH_TRAIN
 PATH_ALLWORDS = config.PATH_ALLWORDS
 PATH_ALLTAGS = config.PATH_ALLTAGS
 PATH_WORD2IDX = config.PATH_WORD2IDX
